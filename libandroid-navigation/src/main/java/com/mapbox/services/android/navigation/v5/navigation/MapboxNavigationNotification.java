@@ -35,8 +35,10 @@ import static com.mapbox.services.android.navigation.v5.utils.time.TimeFormatter
  * This is in charge of creating the persistent navigation session notification and updating it.
  */
 class MapboxNavigationNotification implements NavigationNotification {
+  private static final int INTENT_FLAGS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE :
+          PendingIntent.FLAG_UPDATE_CURRENT;
 
-  private static final String END_NAVIGATION_ACTION = "com.mapbox.intent.action.END_NAVIGATION";
   private NotificationCompat.Builder notificationBuilder;
   private NotificationManager notificationManager;
   private Notification notification;
@@ -141,8 +143,8 @@ class MapboxNavigationNotification implements NavigationNotification {
   private PendingIntent createPendingOpenIntent(Context context) {
     PackageManager pm = context.getPackageManager();
     Intent intent = pm.getLaunchIntentForPackage(context.getPackageName());
-    intent.setPackage(null);
-    return PendingIntent.getActivity(context, 0, intent, 0);
+    intent.setAction(OPEN_NAVIGATION_ACTION);
+    return PendingIntent.getActivity(context, 0, intent, INTENT_FLAGS);
   }
 
   private void registerReceiver(Context context) {
@@ -235,7 +237,7 @@ class MapboxNavigationNotification implements NavigationNotification {
 
   private PendingIntent createPendingCloseIntent(Context context) {
     Intent endNavigationBtn = new Intent(END_NAVIGATION_ACTION);
-    return PendingIntent.getBroadcast(context, 0, endNavigationBtn, 0);
+    return PendingIntent.getBroadcast(context, 0, endNavigationBtn, INTENT_FLAGS);
   }
 
   private void onEndNavigationBtnClick() {
