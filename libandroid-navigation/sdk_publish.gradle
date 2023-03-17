@@ -1,0 +1,49 @@
+apply plugin: 'maven-publish'
+
+def getArtifactFilePath() {
+    return "$buildDir/outputs/aar/libandroid-navigation-release.aar"
+}
+
+static def getPublicationName() {
+    return "release"
+}
+
+publishing {
+    publications {
+        "${getPublicationName()}" (MavenPublication) {
+            groupId "io.github.imranmnts"
+            artifactId "maplibre-navigation-android"
+            version System.getenv("APP_VERSION")
+            artifact getArtifactFilePath()
+
+            // To include project dependencies
+            // generate pom nodes for dependencies
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.api.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+                configurations.implementation.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/imranMnts/maplibre-navigation-android")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
