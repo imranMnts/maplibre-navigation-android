@@ -7,11 +7,11 @@ android {
     compileSdkVersion 31
     buildToolsVersion '30.0.3'
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 15
         targetSdkVersion 31
 
         versionCode 1
-        versionName "1.1.1"
+        versionName "1.1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField('String',
@@ -49,7 +49,7 @@ android {
 dependencies {
     api "org.maplibre.gl:android-sdk-services:5.9.0"
     api "org.maplibre.gl:android-sdk-turf:5.9.0"
-    api("org.maplibre.gl:android-sdk:9.4.0"){
+    implementation("org.maplibre.gl:android-sdk:9.4.0"){
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
     }
@@ -57,24 +57,18 @@ dependencies {
     compileOnly "com.google.android.gms:play-services-location:16.0.0"
 
     // Support
-    api 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
 
     // Logging
-    api "com.jakewharton.timber:timber:4.7.1"
+    implementation "com.jakewharton.timber:timber:4.7.1"
 
     // AutoValues
     annotationProcessor "com.google.auto.value:auto-value:1.5.4"
     compileOnly "com.google.auto.value:auto-value:1.5.4"
 
-    api "androidx.core:core-ktx:1.7.0"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
+    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
 }
-
-apply from: 'javadoc.gradle'
-apply from: "${rootDir}/gradle/mvn-push-android.gradle"
-apply from: "${rootDir}/gradle/checkstyle.gradle"
-apply from: "${rootDir}/gradle/dependencies-graph.gradle"
-apply from: "${rootDir}/gradle/dependency-updates.gradle"
 repositories {
     mavenCentral()
 }

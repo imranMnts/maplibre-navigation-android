@@ -1,20 +1,12 @@
 apply plugin: 'maven-publish'
 
-def getArtifactFilePath() {
-    return "$buildDir/outputs/aar/libandroid-navigation-release.aar"
-}
-
-static def getPublicationName() {
-    return "release"
-}
-
 publishing {
     publications {
-        "${getPublicationName()}" (MavenPublication) {
+        "release" (MavenPublication) {
             groupId "io.github.imranmnts"
             artifactId "maplibre-navigation-android"
             version System.getenv("APP_VERSION")
-            artifact getArtifactFilePath()
+            artifact "$buildDir/outputs/aar/libandroid-navigation-release.aar"
 
             // To include project dependencies
             // generate pom nodes for dependencies
