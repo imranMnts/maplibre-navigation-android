@@ -13,14 +13,6 @@ trigger_map:
   workflow: primary
 workflows:
   deploy:
-    before_run:
-      - _git_status_beginning
-      - _import_dexguard_license_root
-    after_run:
-      - _create_github_release
-      - _create_new_branch
-      - _deploy_to_bitrise_master
-      - _git_status_ending
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -55,3 +47,9 @@ app:
   - opts:
       is_expand: false
     PROJECT_LOCATION: "."
+  - opts:
+      is_expand: false
+    GRADLEW_PATH: "./gradlew"
+  - opts:
+      is_expand: false
+    GRADLE_PATH: "./libandroid-navigation/build.gradle"
